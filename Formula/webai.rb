@@ -16,7 +16,8 @@ class Webai < Formula
   # end
   # SHA256 checksum of your binary for security verification
   # #{sha256} is automatically replaced with the correct checksum
-  sha256 "#{sha256}"
+  # sha256 "#{sha256}"
+  sha256 "050367544c767eda8c7c284b2d5ede7a3a993132594c6fa1474d55d4160fe351"
 
   def install
     bin.install "webai"
