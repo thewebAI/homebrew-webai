@@ -1,0 +1,37 @@
+name: Update Homebrew
+
+# Runs after a release is published
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-homebrew:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout your homebrew tap repository
+      - name: Checkout tap
+        uses: actions/checkout@v4
+        with:
+          repository: theWebai/homebrew-webai
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Update formula with new version and SHA
+      - name: Update formula
+        env:
+          VERSION: ${{ github.event.release.tag_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get SHA256 from the release assets
+          SHA256=$(gh release view $VERSION -R theWebai/webai-cli --json assets -q '.assets[] | select(.name=="webai.sha256").url' | curl -s -L | cut -d' ' -f1)
+
+          # Update version and SHA in formula
+          sed -i "s|url.*|url \"https://github.com/theWebai/webai-cli/releases/download/${VERSION}/webai\"|" Formula/webai.rb
+          sed -i "s|sha256.*|sha256 \"${SHA256}\"|" Formula/webai.rb
+
+          # Commit and push changes
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add Formula/webai.rb
+          git commit -m "webai: update to ${VERSION}"
+          git push
