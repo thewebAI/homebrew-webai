@@ -1,7 +1,7 @@
 class Webai < Formula
   desc "WebAI CLI tool"
   homepage "https://github.com/thewebAI/webai-cli"
-  version "0.0.1"  # This will be automatically updated
+  version "0.1.0"  # This will be automatically updated
 
   # URL where Homebrew can download your binary
   # #{version} is automatically replaced with the latest version
