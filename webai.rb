@@ -5,7 +5,7 @@ class Webai < Formula
 
   # URL where Homebrew can download your binary
   # #{version} is automatically replaced with the latest version
-  url "https://github.com/theWebai/webai-cli/releases/download/v#{version}/webai"
+  url "https://github.com/thewebAI/webai-cli/releases/download/v#{version}/webai"
 
   # if OS.mac? && Hardware::CPU.arm?
   #   url "https://github.com/theWebai/webai-cli/releases/download/v#{version}/webai-darwin-arm64"
