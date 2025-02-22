@@ -21,6 +21,7 @@ class Webai < Formula
 
   def install
     bin.install "webai"
+    chmod 0755, bin/"webai"
   end
 
   test do
