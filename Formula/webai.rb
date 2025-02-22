@@ -1,11 +1,11 @@
 class Webai < Formula
   desc "WebAI CLI tool"
-  homepage "https://github.com/thewebAI/webai-cli"
+  homepage "https://github.com/thewebAI/webai-cli-releases"
   version "0.1.0"  # This will be automatically updated
 
   # URL where Homebrew can download your binary
   # #{version} is automatically replaced with the latest version
-  url "https://github.com/thewebAI/webai-cli/releases/download/v#{version}/webai"
+  url "https://github.com/thewebAI/webai-cli-releases/releases/download/v#{version}/webai"
 
   # if OS.mac? && Hardware::CPU.arm?
   #   url "https://github.com/theWebai/webai-cli/releases/download/v#{version}/webai-darwin-arm64"
