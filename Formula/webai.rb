@@ -1,7 +1,7 @@
 class Webai < Formula
   desc "WebAI CLI - developer entry point into the webAI platform"
   homepage "https://github.com/thewebAI/webai-cli"
-  version "0.1.14"
+  version "0.1.15"
   license "MIT"  # Add license if applicable
   
   # Use `head` to allow updates from the main branch
@@ -9,25 +9,25 @@ class Webai < Formula
 
   # Add a bottle block to improve installation speed (optional)
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "0b573fb3bbddd9bd11f1c079cb60b8ac8878e838068e36cce11619b3750360f1"
-    sha256 cellar: :any_skip_relocation, monterey: "d8bb6c015c40e41d91ba82560fe35128b5eb26c9215aecc7b089c9e0cee6ae9e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "b7b8b6e90cf6116c0ddd3bda9e350d3e24d76dc11b0f578f364606fb1b7b50d9"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "ced22675a0b36d0051e3335faa145d360213c4a6d952603bc40f408184037a92"
+    sha256 cellar: :any_skip_relocation, monterey: "e231654d831d5c4207e0ea29f830300ef2c04c72209da7039434c62a94a51633"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "5db917f7d50afdeca97ba5b02c78f6909952722bfbf50bae015c7f55bff1e7fa"
   end
 
   on_macos do
     on_arm do
       url "https://github.com/thewebAI/webai-cli/releases/download/v#{version}/webai-darwin-arm64"
-      sha256 "0b573fb3bbddd9bd11f1c079cb60b8ac8878e838068e36cce11619b3750360f1"
+      sha256 "ced22675a0b36d0051e3335faa145d360213c4a6d952603bc40f408184037a92"
     end
     on_intel do
       url "https://github.com/thewebAI/webai-cli/releases/download/v#{version}/webai-darwin-x64"
-      sha256 "d8bb6c015c40e41d91ba82560fe35128b5eb26c9215aecc7b089c9e0cee6ae9e"
+      sha256 "e231654d831d5c4207e0ea29f830300ef2c04c72209da7039434c62a94a51633"
     end
   end
 
   on_linux do
     url "https://github.com/thewebAI/webai-cli/releases/download/v#{version}/webai-linux"
-    sha256 "b7b8b6e90cf6116c0ddd3bda9e350d3e24d76dc11b0f578f364606fb1b7b50d9"
+    sha256 "5db917f7d50afdeca97ba5b02c78f6909952722bfbf50bae015c7f55bff1e7fa"
   end
 
   def install
