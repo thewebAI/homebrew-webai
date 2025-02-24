@@ -9,8 +9,6 @@ class Webai < Formula
 
   # Add a bottle block to improve installation speed (optional)
   bottle do
-    rebuild 0
-    root_url "https://github.com/thewebAI/webai-cli/releases/download/v#{version}"
     sha256 cellar: :any_skip_relocation, arm64_monterey: "0b573fb3bbddd9bd11f1c079cb60b8ac8878e838068e36cce11619b3750360f1"
     sha256 cellar: :any_skip_relocation, monterey: "d8bb6c015c40e41d91ba82560fe35128b5eb26c9215aecc7b089c9e0cee6ae9e"
     sha256 cellar: :any_skip_relocation, x86_64_linux: "b7b8b6e90cf6116c0ddd3bda9e350d3e24d76dc11b0f578f364606fb1b7b50d9"
