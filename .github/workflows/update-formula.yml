@@ -30,9 +30,24 @@ jobs:
 
           # Get SHA256 values for each binary
           echo "Fetching SHA256 values from release assets..."
-          ARM_SHA256=$(gh release view $VERSION -R thewebAI/webai-cli --json assets -q '.assets[] | select(.name=="webai-darwin-arm64.sha256").url' | curl -s -L | cut -d' ' -f1)
-          INTEL_SHA256=$(gh release view $VERSION -R thewebAI/webai-cli --json assets -q '.assets[] | select(.name=="webai-darwin-x64.sha256").url' | curl -s -L | cut -d' ' -f1)
-          LINUX_SHA256=$(gh release view $VERSION -R thewebAI/webai-cli --json assets -q '.assets[] | select(.name=="webai-linux.sha256").url' | curl -s -L | cut -d' ' -f1)
+
+          # Fetch all assets info first
+          ASSETS_JSON=$(gh release view $VERSION -R thewebAI/webai-cli --json assets)
+
+          # Extract SHA256 values using jq
+          ARM_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-arm64.sha256") | .url' | xargs curl -s -L)
+          INTEL_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-x64.sha256") | .url' | xargs curl -s -L)
+          LINUX_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] |
+          select(.name=="webai-linux.sha256") | .url' | xargs curl -s -L)
+
+          # Add this right after getting the SHA values
+          if [ -z "$ARM_SHA256" ] || [ -z "$INTEL_SHA256" ] || [ -z "$LINUX_SHA256" ]; then
+            echo "Error: Failed to fetch one or more SHA256 values"
+            echo "ARM_SHA256: ${ARM_SHA256}"
+            echo "INTEL_SHA256: ${INTEL_SHA256}"
+            echo "LINUX_SHA256: ${LINUX_SHA256}"
+            exit 1
+          fi
 
           echo "ARM SHA256: ${ARM_SHA256}"
           echo "Intel SHA256: ${INTEL_SHA256}"
