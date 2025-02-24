@@ -28,15 +28,25 @@ jobs:
         run: |
           echo "Starting formula update for version: ${VERSION}"
 
-          # Get SHA256 from the release assets
-          echo "Fetching SHA256 from release assets..."
-          SHA256=$(gh release view $VERSION -R thewebAI/webai-cli --json assets -q '.assets[] | select(.name=="webai.sha256").url' | curl -s -L | cut -d' ' -f1)
-          echo "SHA256: ${SHA256}"
+          # Get SHA256 values for each binary
+          echo "Fetching SHA256 values from release assets..."
+          ARM_SHA256=$(gh release view $VERSION -R thewebAI/webai-cli --json assets -q '.assets[] | select(.name=="webai-darwin-arm64.sha256").url' | curl -s -L | cut -d' ' -f1)
+          INTEL_SHA256=$(gh release view $VERSION -R thewebAI/webai-cli --json assets -q '.assets[] | select(.name=="webai-darwin-x64.sha256").url' | curl -s -L | cut -d' ' -f1)
+          LINUX_SHA256=$(gh release view $VERSION -R thewebAI/webai-cli --json assets -q '.assets[] | select(.name=="webai-linux.sha256").url' | curl -s -L | cut -d' ' -f1)
 
-          # Update version and SHA in formula
-          echo "Updating formula with version: ${VERSION} and SHA256: ${SHA256}"
-          sed -i "s|url.*|url \"https://github.com/thewebAI/webai-cli/releases/download/${VERSION}/webai\"|" Formula/webai.rb
-          sed -i "s|sha256.*|sha256 \"${SHA256}\"|" Formula/webai.rb
+          echo "ARM SHA256: ${ARM_SHA256}"
+          echo "Intel SHA256: ${INTEL_SHA256}"
+          echo "Linux SHA256: ${LINUX_SHA256}"
+
+          # Update version and SHA values in formula
+          echo "Updating formula file..."
+          # Update version without changing URLs
+          sed -i "s|version \".*\"|version \"${VERSION#v}\"|" Formula/webai.rb
+
+          # Update SHA values while preserving URLs
+          sed -i "/on_arm do/,/end/ s|sha256 \".*\"|sha256 \"${ARM_SHA256}\"|" Formula/webai.rb
+          sed -i "/on_intel do/,/end/ s|sha256 \".*\"|sha256 \"${INTEL_SHA256}\"|" Formula/webai.rb
+          sed -i "/on_linux do/,/end/ s|sha256 \".*\"|sha256 \"${LINUX_SHA256}\"|" Formula/webai.rb
 
           echo "Modified formula contents:"
           cat Formula/webai.rb
@@ -49,4 +59,4 @@ jobs:
           git commit -m "webai: update to ${VERSION}"
           git push
 
-          echo "Formula update completed successfully"
+          echo "Formula update completed successfully!"
