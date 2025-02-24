@@ -55,13 +55,13 @@ jobs:
 
           # Update version and SHA values in formula
           echo "Updating formula file..."
-          # Update version without changing URLs
-          sed -i "s|version \".*\"|version \"${VERSION#v}\"|" Formula/webai.rb
+          # Update version line only
+          sed -i "s|^  version \".*\"|  version \"${VERSION#v}\"|" Formula/webai.rb
 
-          # Update SHA values while preserving URLs
-          sed -i "/on_arm do/,/end/ s|sha256 \".*\"|sha256 \"${ARM_SHA256}\"|" Formula/webai.rb
-          sed -i "/on_intel do/,/end/ s|sha256 \".*\"|sha256 \"${INTEL_SHA256}\"|" Formula/webai.rb
-          sed -i "/on_linux do/,/end/ s|sha256 \".*\"|sha256 \"${LINUX_SHA256}\"|" Formula/webai.rb
+          # Update SHA values only, leaving URLs unchanged
+          sed -i "/on_arm do/,/end/ s|sha256 \"[^\"]*\"|sha256 \"${ARM_SHA256}\"|" Formula/webai.rb
+          sed -i "/on_intel do/,/end/ s|sha256 \"[^\"]*\"|sha256 \"${INTEL_SHA256}\"|" Formula/webai.rb
+          sed -i "/on_linux do/,/end/ s|sha256 \"[^\"]*\"|sha256 \"${LINUX_SHA256}\"|" Formula/webai.rb
 
           echo "Modified formula contents:"
           cat Formula/webai.rb
