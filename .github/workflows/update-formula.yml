@@ -14,13 +14,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: thewebAI/homebrew-webai
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       # Update formula with new version and SHA
       - name: Update formula
         env:
           VERSION: ${{ github.event.client_payload.version }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           # Get SHA256 from the release assets
           SHA256=$(gh release view $VERSION -R thewebAI/webai-cli --json assets -q '.assets[] | select(.name=="webai.sha256").url' | curl -s -L | cut -d' ' -f1)
