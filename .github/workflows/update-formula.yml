@@ -34,25 +34,39 @@ jobs:
           # Fetch all assets info first
           ASSETS_JSON=$(gh release view $VERSION -R thewebAI/webai-cli --json assets)
 
-          # Extract SHA256 values using jq
+          # Extract SHA256 values using jq for binaries
           ARM_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-arm64.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
           INTEL_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-x64.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
           LINUX_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-linux.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
 
-          # Add this right after getting the SHA values
-          if [ -z "$ARM_SHA256" ] || [ -z "$INTEL_SHA256" ] || [ -z "$LINUX_SHA256" ]; then
+          # Extract SHA256 values for bottles
+          ARM_BOTTLE_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-arm64_monterey.bottle.tar.gz.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
+          INTEL_BOTTLE_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-monterey.bottle.tar.gz.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
+          LINUX_BOTTLE_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-x86_64_linux.bottle.tar.gz.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
+
+          # Validate SHA values
+          if [ -z "$ARM_SHA256" ] || [ -z "$INTEL_SHA256" ] || [ -z "$LINUX_SHA256" ] || \
+            [ -z "$ARM_BOTTLE_SHA256" ] || [ -z "$INTEL_BOTTLE_SHA256" ] || [ -z "$LINUX_BOTTLE_SHA256" ]; then
             echo "Error: Failed to fetch one or more SHA256 values"
+            echo "Binary SHAs:"
             echo "ARM_SHA256: ${ARM_SHA256}"
             echo "INTEL_SHA256: ${INTEL_SHA256}"
             echo "LINUX_SHA256: ${LINUX_SHA256}"
+            echo "Bottle SHAs:"
+            echo "ARM_BOTTLE_SHA256: ${ARM_BOTTLE_SHA256}"
+            echo "INTEL_BOTTLE_SHA256: ${INTEL_BOTTLE_SHA256}"
+            echo "LINUX_BOTTLE_SHA256: ${LINUX_BOTTLE_SHA256}"
             exit 1
           fi
 
           echo "ARM SHA256: ${ARM_SHA256}"
           echo "Intel SHA256: ${INTEL_SHA256}"
           echo "Linux SHA256: ${LINUX_SHA256}"
+          echo "ARM Bottle SHA256: ${ARM_BOTTLE_SHA256}"
+          echo "Intel Bottle SHA256: ${INTEL_BOTTLE_SHA256}"
+          echo "Linux Bottle SHA256: ${LINUX_BOTTLE_SHA256}"
 
-          # Update version and SHA values in formula
+          # Update Version, SHA values, and bottle SHA values in formula
           echo "Updating formula file..."
           # Update version line only
           sed -i "s|^  version \".*\"|  version \"${VERSION#v}\"|" Formula/webai.rb
@@ -61,6 +75,11 @@ jobs:
           sed -i "/on_arm do/,/end/ s|sha256 \"[^\"]*\"|sha256 \"${ARM_SHA256}\"|" Formula/webai.rb
           sed -i "/on_intel do/,/end/ s|sha256 \"[^\"]*\"|sha256 \"${INTEL_SHA256}\"|" Formula/webai.rb
           sed -i "/on_linux do/,/end/ s|sha256 \"[^\"]*\"|sha256 \"${LINUX_SHA256}\"|" Formula/webai.rb
+
+          # Update bottle SHA values
+          sed -i "s|sha256 cellar: :any_skip_relocation, arm64_monterey: \"[^\"]*\"|sha256 cellar: :any_skip_relocation, arm64_monterey: \"${ARM_BOTTLE_SHA256}\"|" Formula/webai.rb
+          sed -i "s|sha256 cellar: :any_skip_relocation, monterey: \"[^\"]*\"|sha256 cellar: :any_skip_relocation, monterey: \"${INTEL_BOTTLE_SHA256}\"|" Formula/webai.rb
+          sed -i "s|sha256 cellar: :any_skip_relocation, x86_64_linux: \"[^\"]*\"|sha256 cellar: :any_skip_relocation, x86_64_linux: \"${LINUX_BOTTLE_SHA256}\"|" Formula/webai.rb
 
           echo "Modified formula contents:"
           cat Formula/webai.rb
