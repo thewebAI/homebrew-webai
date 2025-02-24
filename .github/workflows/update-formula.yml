@@ -35,10 +35,9 @@ jobs:
           ASSETS_JSON=$(gh release view $VERSION -R thewebAI/webai-cli --json assets)
 
           # Extract SHA256 values using jq
-          ARM_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-arm64.sha256") | .url' | xargs curl -s -L)
-          INTEL_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-x64.sha256") | .url' | xargs curl -s -L)
-          LINUX_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] |
-          select(.name=="webai-linux.sha256") | .url' | xargs curl -s -L)
+          ARM_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-arm64.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
+          INTEL_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-x64.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
+          LINUX_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-linux.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
 
           # Add this right after getting the SHA values
           if [ -z "$ARM_SHA256" ] || [ -z "$INTEL_SHA256" ] || [ -z "$LINUX_SHA256" ]; then
