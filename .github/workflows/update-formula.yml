@@ -1,9 +1,9 @@
 name: Update Homebrew
 
-# Runs after a release is published
+# Runs when receiving repository_dispatch event
 on:
-  release:
-    types: [published]
+  repository_dispatch:
+    types: [new_release]
 
 jobs:
   update-homebrew:
@@ -19,7 +19,7 @@ jobs:
       # Update formula with new version and SHA
       - name: Update formula
         env:
-          VERSION: ${{ github.event.release.tag_name }}
+          VERSION: ${{ github.event.client_payload.version }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Get SHA256 from the release assets
