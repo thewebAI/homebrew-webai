@@ -1,7 +1,7 @@
 class Webai < Formula
   desc "WebAI CLI - developer entry point into the webAI platform"
   homepage "https://github.com/thewebAI/webai-cli"
-  version "0.1.10"
+  version "0.1.12"
 
   on_macos do
     on_arm do
