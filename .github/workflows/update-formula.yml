@@ -40,9 +40,9 @@ jobs:
           LINUX_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-linux.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
 
           # Extract SHA256 values for bottles
-          ARM_BOTTLE_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-arm64_monterey.bottle.tar.gz.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
-          INTEL_BOTTLE_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-monterey.bottle.tar.gz.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
-          LINUX_BOTTLE_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-x86_64_linux.bottle.tar.gz.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
+          ARM_BOTTLE_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-arm64.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
+          INTEL_BOTTLE_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-x64.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
+          LINUX_BOTTLE_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-linux.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
 
           # Validate SHA values
           if [ -z "$ARM_SHA256" ] || [ -z "$INTEL_SHA256" ] || [ -z "$LINUX_SHA256" ] || \
