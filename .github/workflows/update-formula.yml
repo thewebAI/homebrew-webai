@@ -32,7 +32,7 @@ jobs:
           echo "Fetching SHA256 values from release assets..."
 
           # Fetch all assets info first
-          ASSETS_JSON=$(gh release view $VERSION -R thewebAI/webai-cli --json assets)
+          ASSETS_JSON=$(gh release view $VERSION -R thewebAI/webai-cli-public --json assets)
 
           # Extract SHA256 values using jq for binaries
           ARM_SHA256=$(echo $ASSETS_JSON | jq -r '.assets[] | select(.name=="webai-darwin-arm64.sha256") | .url' | xargs curl -s -L | cut -d' ' -f1)
