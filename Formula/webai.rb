@@ -1,7 +1,7 @@
 class Webai < Formula
   desc "WebAI CLI - developer entry point into the webAI platform"
   homepage "https://github.com/thewebAI/webai-cli-public"
-  version "0.1.29"
+  version "0.1.30"
   url "https://github.com/thewebAI/webai-cli-public/archive/refs/tags/v#{version}.tar.gz"
   license "MIT"
   
@@ -9,17 +9,17 @@ class Webai < Formula
   on_macos do
     on_arm do
       url "https://github.com/thewebAI/webai-cli-public/releases/download/v#{version}/webai-darwin-arm64"
-      sha256 "44ea3fee0a8de36325f3745ab4c12ad7b36a5030bd90f86dc304c1a865aee490"
+      sha256 "72288a5c18015451d64fb2db77758207accd9030ec4deda1dc954bdb3edbda7b"
     end
     on_intel do
       url "https://github.com/thewebAI/webai-cli-public/releases/download/v#{version}/webai-darwin-x64"
-      sha256 "23978b2ac852fd338514634285f88496f77b9b909771b46876cde6d772aaee19"
+      sha256 "1a7249bf5eed04681a63df96da0f25b6330c8339447f33cbbe0d187d392e0b1b"
     end
   end
 
   on_linux do
     url "https://github.com/thewebAI/webai-cli-public/releases/download/v#{version}/webai-linux"
-    sha256 "39e0929c6b1a40776a482fb3dbaa5faf1862c95e5417dcfb5646999515ee142d"
+    sha256 "0f0072795ab2917875df7832f295e10f30bd1a60a875f6aac983ba1f1d8f19ec"
   end
 
   def install
