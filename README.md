@@ -16,5 +16,4 @@ brew update
 brew upgrade webai
 ```
 
-For more information, see the [webAI CLI](https://github.com/thewebAI/webai-cli)
-repository.
+For more information, see the [webAI CLI](https://github.com/thewebAI/webai-cli-public) repository.
